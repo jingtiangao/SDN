@@ -51,42 +51,49 @@
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
-							<h1>A SDN/NFV-Based IoT Network Slicing Creation System</h1>
+							<h1>Epsilon Transformation file execution code tracking</h1>
 							
-												<p>we propose
-					a novel IoT network slicing creation system which based on
-					two emerging SDN and NFV technologies. It provides an
-					easily-operating service creation environment and a service
-					execution environment based on micro service architecture.
-					We implement an IoT muti-flow transmission scenario. After
-					adding subservices and QoS policies into a business process
-					at the design plane, the IoT scenario can run automatically
-					at the execution plane. Experiment results on the scenario
-					show that the numbers of packets per second of different
-					flows are changing gradually depend on QoS policies.</p> 
+								<a class="system-link" href="https://github.com/jingtiangao/ETL-file-execution-code-tracking" target="_blank">source code </a>
 
-							<p>
-								• Implemented IoT network slices storage model in the drag-and-drop workspace of Design plane.
-Realize the storage of information including network slice descriptor, VNF descriptor, business
-process information and QoS policies in IoT scenario.</p>
-<p>• Solve the network problem of cross origin in management and orchestration domain of Execution
-Plane.</p>
-<p>• Learned multi-objective optimization algorithm for Placement of Service Chain in NFV-enabled
-Data Center, to reduce Service Function Chain delay and optimize placement consumption while
-guaranteeing availability.</p>
-							</p>
 
-							<
-							<br/>
-							<p>Network, Slice and IoT scenario</p>
-							<img src="images/1.jpg">
-							<br/>
-                             
-							
+								<p>Language related: Java
+Tool usage: Eclipse
+Epsilon: is a collection of modeling languages and tools for modeling engineering
+The subject is mainly related to ETL (Epsilon Transformation) and EOL (Epsilon Object) languages. ETL inherits EOL and is mainly used for transformation between models</p>
+<img src="images/1.png">
+								<img src="images/2.png">
+								<p>First follow this guide
+https://www.eclipse.org/epsilon/doc/articles/running-from-source/
+Clone Epsilon's source code library and right-click all packages in the plugins, features and tests three folders to complete the import project.
+</p> 
+								<p>The location of the main files involved in the source code:
+Package name org.eclipse.epsilon.common.parse
+AST.java
+Package name org.eclipse.epsilon.eol.execute.control
+          IExecutionListener.java
+Package name org.eclipse.epsilon.common.module
+          ModuleElement.java
+</p> 
+								<p>The realization flow chart of the specific idea code (the ultimate goal is to obtain the code line that runs after the execution of the ETL file)
 
-							<p>The architecture of IoT network slicing creation system.</p>
-							<img src="images/2.png">
-                             
+In order to obtain the Executed lines (executed code), it is necessary to record the running of the ETL file. Before the ETL runs, it will be compiled into an AST (abstract syntax tree). Each node of this AST is the module elements of the ETL, so that you can view it The activation status of AST is used to determine the line of code running. The method for how to establish the relationship between ETL and AST nodes (module elements) is shown in the figure below.
+</p>  
+<img src="images/3.png">
+								<p>ETL inherits EOL, so it also inherits the ExecutionListener interface in the EolModule module. The function of this interface can be instantiated as needed. There are three methods in this interface.
+The main methods used in this subject are
+finishedExecuting(ModuleElment ast, Objct result, IEolContext context)
+This method will run every time the AST node is called. The first attribute of the method is ModuleElement ast, which represents the last node executed, so by marking this node we can know which ETL statements have been executed.
+
+And there is a method in ModuleElement called:
+getRegine()
+The return value of this method is the row and column data
+For example, "1:1-20:30" means that this ModuleElement runs from the first line and the first column of the code to the 20th line and 30th column.
+
+Therefore, by using the above two methods, you can instantiate the finishedExecuting() method in the ExecutionListener interface interface, and record the row and column data returned after each AST node is run in the instantiated method.
+</p> 
+								
+								<img src="images/4.png">
+											
                             
 							
 						</div>
